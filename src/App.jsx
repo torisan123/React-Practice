@@ -22,17 +22,28 @@ function App() {
   // UI
   return (
     <>
-      <div className="container">
-        <input name="city" type="text" placeholder="Enter city" value={city} onChange={(e) => setCity(e.target.value)} />
-        <button onClick={handleAdd}>Add</button>
+      <div className="flex gap-2 p-4 max-w-md mx-auto">
+        <input 
+          className="border px-3 py-2 rounded w-full"
+          name="city" type="text"placeholder="Enter city" 
+          value={city} onChange={(e) => setCity(e.target.value)}
+        />
+        <button 
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" 
+          onClick={handleAdd}
+        >
+          Add
+        </button>
       </div>
 
-      <ul>
+      <ul className="max-w-md mx-auto p-0">
         {plans.map((plan) => {
           return (
-            <li key={plan.id}>
+            <li key={plan.id} className="flex justify-between border p-3 rounded mb-2 shadow-sm">
               {plan.city}
-              <button onClick={() => handleDelete(plan)}>Delete</button>
+              <button className="text-red-500 hover:text-red-700" onClick={() => handleDelete(plan)}>
+                Delete
+              </button>
             </li>
           )
         })}
