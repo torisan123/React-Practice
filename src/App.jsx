@@ -30,13 +30,12 @@ function App() {
   return (
     <>
       <div className="flex gap-2 p-4 max-w-md mx-auto">
-        <input 
-          className="border px-3 py-2 rounded w-full"
+        <input className="flex-1 border px-3 py-2 rounded"
           name="city" type="text" placeholder="Enter city" 
           value={city} onChange={(e) => setCity(e.target.value)}
         />
-        <input name="start-date" type="date" className="border px-3 py-2 rounded" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
-        <input name="end-date" type="date" className="border px-3 py-2 rounded" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+        <input name="start-date" type="date" className="w-32 border px-3 py-2 rounded" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        <input name="end-date" type="date" className="w-32 border px-3 py-2 rounded" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         <button 
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" 
           onClick={handleAdd}
