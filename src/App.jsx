@@ -15,15 +15,36 @@ function App() {
   function handleAdd() {
     if (!city) return; // Prevent adding empty city
 
-    const newStay = { id: Date.now(), city: city, startDate: startDate, endDate: endDate }; // Create a new plan object with a unique ID and the current city
+    // Create a new plan object with a unique ID and the current city
+    const newStay = { 
+      id: Date.now(), 
+      city: city, 
+      startDate: startDate, 
+      endDate: endDate,
+      hotels: []
+    };
+
     setStays([...stays, newStay]); // Add the new plan to the stays list
+    setEndDate("");
     setCity(""); // Clear the input field after adding
     setStartDate("");
-    setEndDate("");
   }
 
   function handleDelete(id) {
     setStays(stays.filter((s) => s.id !== id)); // Remove the specified plan from the list
+  }
+
+  function onAddHotel(id, hotel) {
+    const updated = stays.map((s) => {
+      if (s.id === id) {
+        return {
+          ...s, 
+          hotels: [...s.hotels, hotel]
+        }
+      }
+      return s;
+    })
+    setStays(updated);
   }
 
   // UI
@@ -46,7 +67,7 @@ function App() {
 
       <ul className="max-w-md mx-auto p-0">
         {stays.map((stay) => {
-          return <StayCard key={stay.id} stay={stay} onDelete={() => handleDelete(stay.id)} />;
+          return <StayCard key={stay.id} stay={stay} onDelete={() => handleDelete(stay.id)} onAddHotel={onAddHotel} />;
         })}
       </ul>
     </>
