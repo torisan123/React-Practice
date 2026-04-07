@@ -47,6 +47,19 @@ function App() {
     setStays(updated);
   }
 
+  function onDeleteHotel(stayId, hotelId) {
+    const updated = stays.map((s) => {
+      if (s.id === stayId) {
+        return {
+          ...s, 
+          hotels: s.hotels.filter((h) => h.id !== hotelId)
+        }
+      }
+      return s;
+    })
+    setStays(updated);
+  }
+  
   // UI
   return (
     <>
@@ -67,7 +80,7 @@ function App() {
 
       <ul className="max-w-md mx-auto p-0">
         {stays.map((stay) => {
-          return <StayCard key={stay.id} stay={stay} onDelete={() => handleDelete(stay.id)} onAddHotel={onAddHotel} />;
+          return <StayCard key={stay.id} stay={stay} onDelete={() => handleDelete(stay.id)} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />;
         })}
       </ul>
     </>
