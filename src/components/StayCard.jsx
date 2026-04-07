@@ -1,9 +1,10 @@
 import { useState } from "react";
 
-function StayCard({ stay, onDelete, onAddHotel }) {
+function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel }) {
   const [hotelName, setHotelName] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
+  const [isHotelFormOpen, setIsHotelFormOpen] = useState(false);
 
   return (
     <>
@@ -13,55 +14,67 @@ function StayCard({ stay, onDelete, onAddHotel }) {
           {stay.startDate} → {stay.endDate}
         </p>
 
-        {stay.hotels.map((hotel, index) => (
-          <div key={index} className="border p-2 mt-2 rounded">
+        {stay.hotels.map((hotel) => (
+          <div key={hotel.id} className="border p-2 mt-2 rounded">
             <p>{hotel.name}</p>
             <p>
               {hotel.checkIn} → {hotel.checkOut}
             </p>
+            <button onClick={() => onDeleteHotel(stay.id, hotel.id)}>Delete</button>
           </div>
         ))}
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onAddHotel(stay.id, {
-              name: hotelName,
-              checkIn: checkInDate,
-              checkOut: checkOutDate,
-            });
+        {isHotelFormOpen && (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onAddHotel(stay.id, {
+                id: Date.now(),
+                name: hotelName,
+                checkIn: checkInDate,
+                checkOut: checkOutDate,
+              });
 
-            setHotelName("");
-            setCheckInDate("");
-            setCheckOutDate("");
-          }}
-          className="flex flex-col gap-2 mt-3"
-        >
-          <input
-            value={hotelName}
-            onChange={(e) => setHotelName(e.target.value)}
-            placeholder="Hotel Name"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <input
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
-            type="date"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <input
-            value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
-            type="date"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
+              setHotelName("");
+              setCheckInDate("");
+              setCheckOutDate("");
+              setIsHotelFormOpen(false);
+            }}
+            className="flex flex-col gap-2 mt-3"
           >
-            Add Hotel
-          </button>
-        </form>
+            <input
+              value={hotelName}
+              onChange={(e) => setHotelName(e.target.value)}
+              placeholder="Hotel Name"
+              className="border p-2 rounded w-full mt-2"
+            />
+            <input
+              value={checkInDate}
+              onChange={(e) => setCheckInDate(e.target.value)}
+              type="date"
+              className="border p-2 rounded w-full mt-2"
+            />
+            <input
+              value={checkOutDate}
+              onChange={(e) => setCheckOutDate(e.target.value)}
+              type="date"
+              className="border p-2 rounded w-full mt-2"
+            />
+            <button
+              type="submit"
+              className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
+            >
+              Register
+            </button>
+          </form>
+        )}
+
+        <button
+          onClick={() => setIsHotelFormOpen(!isHotelFormOpen)}
+          className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
+        >
+          {isHotelFormOpen ? "Cancel" : "+ Add Hotel"}
+        </button>
 
         <button
           onClick={onDelete}
