@@ -1,6 +1,16 @@
 import './App.css'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StayCard from './components/StayCard';
+
+const getInitialStays = () => {
+  try {
+    const stored = localStorage.getItem("stays");
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.error("Failed to parse stays from localStorage", e);
+    return [];
+  }
+}
 
 function App() {
   // Input State
@@ -9,11 +19,15 @@ function App() {
   const [endDate, setEndDate] = useState("");
 
   // Stays State
-  const [stays, setStays] = useState([]);
-  
+  const [stays, setStays] = useState(getInitialStays);
+  // If stays change, update localStorage
+  useEffect(() => {
+    localStorage.setItem("stays", JSON.stringify(stays));
+  }, [stays]);  
+
   // Functions
-  function handleAdd() {
-    if (!city) return; // Prevent adding empty city
+  function onAddStay() {
+    if (!city.trim()) return; // Prevent adding empty city
 
     // Create a new plan object with a unique ID and the current city
     const newStay = { 
@@ -24,14 +38,18 @@ function App() {
       hotels: []
     };
 
-    setStays([...stays, newStay]); // Add the new plan to the stays list
+    // Add the new plan to the stays list
+    setStays((prev) => [...prev, newStay]);
+
+    // Clear the input field after adding
     setEndDate("");
-    setCity(""); // Clear the input field after adding
+    setCity("");
     setStartDate("");
   }
 
-  function handleDelete(id) {
-    setStays(stays.filter((s) => s.id !== id)); // Remove the specified plan from the list
+  function onDeleteStay(id) {
+    // Remove the specified plan from the list
+    setStays(stays.filter((s) => s.id !== id));
   }
 
   function onAddHotel(id, hotel) {
@@ -72,7 +90,7 @@ function App() {
         <input name="end-date" type="date" className="w-full sm:w-32 border px-3 py-2 rounded" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         <button 
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" 
-          onClick={handleAdd}
+          onClick={onAddStay}
         >
           Add
         </button>
@@ -82,7 +100,7 @@ function App() {
         {stays.length === 0 && <p className="text-center text-gray-500 mt-4">No travel plans yet. Start by adding a city!</p>}
         {stays.map((stay) => (
           <li className="mb-4" key={stay.id}>
-            <StayCard stay={stay} onDelete={() => handleDelete(stay.id)} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />
+            <StayCard stay={stay} onDelete={() => onDeleteStay(stay.id)} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />
           </li>
         ))}
       </ul>
