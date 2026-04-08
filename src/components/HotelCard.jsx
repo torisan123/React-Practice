@@ -1,13 +1,18 @@
 function HotelCard({ hotel, onDelete }) {
   return (
-    <div className="border p-3 mt-2 rounded-lg shadow-sm bg-gray-50">
-    <p className="font-medium">{hotel.name}</p>
-    <p className="text-sm text-gray-600">
-        {hotel.checkIn} → {hotel.checkOut}
-    </p>
-    <button onClick={onDelete} className="text-red-500 text-sm mt-1 hover:text-red-700">
+    <div className="flex justify-between items-center mt-2">
+      <div>
+        <p className="font-medium text-gray-800">{hotel.name}</p>
+        <p className="text-sm text-gray-400">
+          {hotel.checkIn} - {hotel.checkOut}
+        </p>
+      </div>
+      <button
+        onClick={onDelete}
+        className="text-red-400 text-sm mt-1 hover:text-red-600"
+      >
         Delete
-    </button>
+      </button>
     </div>
   );
 }

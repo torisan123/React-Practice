@@ -10,7 +10,7 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
   const [editCity, setEditCity] = useState(stay.city);
 
   return (
-    <div className="border rounded-lg p-4 shadow-lg bg-white mb-4">
+    <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm border border-gray-100">
       <div className="flex justify-between items-start">
         {isEditing ? (
           <>
@@ -32,7 +32,7 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
               className="text-lg border-blue-400 bg-blue-50 rounded w-full mr-2 px-3 py-2"
             />
             <button
-              className="bg-green-500 text-white ml-2 px-3 py-2 rounded hover:bg-green-600 transition"
+              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
               onClick={() => {
                 if (!editCity.trim()) {
                   alert("City name cannot be empty.");
@@ -45,7 +45,7 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
               Save
             </button>
             <button
-              className="bg-gray-500 text-white ml-2 px-3 py-2 rounded hover:bg-gray-600 transition"
+              className="bg-gray-100 text-gray-700 hover:bg-gray-200 text-white ml-2 px-3 py-2 rounded-lg transition"
               onClick={() => {
                 setEditCity(stay.city);
                 setIsEditing(false);
@@ -58,7 +58,7 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
           <>
             <h3 className="text-lg p-2 font-bold w-full">{stay.city}</h3>
             <button
-              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded hover:bg-blue-600 transition"
+              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
               onClick={() => setIsEditing(true)}
             >
               Edit
@@ -67,8 +67,8 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
         )}
       </div>
 
-      <p className="text-sm text-gray-500 mt-1">
-        {stay.startDate} → {stay.endDate}
+      <p className="text-sm text-gray-400 mt-1">
+        {stay.startDate} - {stay.endDate}
       </p>
 
       {stay.hotels.map((hotel) => (
@@ -117,7 +117,7 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
           />
           <button
             type="submit"
-            className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
+            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition"
           >
             Save
           </button>
@@ -126,14 +126,14 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
 
       <button
         onClick={() => setIsHotelFormOpen(!isHotelFormOpen)}
-        className="bg-green-500 text-white mr-2 px-3 py-2 rounded hover:bg-green-600 transition"
+        className="bg-blue-500 hover:bg-blue-600 text-white mr-2 px-3 py-2 rounded-lg transition"
       >
         {isHotelFormOpen ? "Cancel" : "+ Add Hotel"}
       </button>
 
       <button
         onClick={onDelete}
-        className="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600 transition mt-4"
+        className="text-red-500 hover:text-red-600 bg-transparent px-3 py-2 rounded transition mt-4"
       >
         Delete
       </button>
