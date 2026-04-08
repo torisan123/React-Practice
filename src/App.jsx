@@ -77,7 +77,18 @@ function App() {
     })
     setStays(updated);
   }
-  
+
+  function onUpdateStay(id, updateStay) {
+    setStays(prev => {
+      return prev.map((s) => {
+        if (s.id === id) {
+          return { ...s, ...updateStay };
+        }
+        return s;
+      })
+    });
+  }
+
   return (
     <>
       <h1 className="text-2xl font-bold text-center mt-4">My Travel Plans</h1>
@@ -100,7 +111,7 @@ function App() {
         {stays.length === 0 && <p className="text-center text-gray-500 mt-4">No travel plans yet. Start by adding a city!</p>}
         {stays.map((stay) => (
           <li className="mb-4" key={stay.id}>
-            <StayCard stay={stay} onDelete={() => onDeleteStay(stay.id)} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />
+            <StayCard stay={stay} onDelete={() => onDeleteStay(stay.id)} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} onUpdateStay={onUpdateStay} />
           </li>
         ))}
       </ul>

@@ -1,15 +1,72 @@
 import { useState } from "react";
 import HotelCard from "./HotelCard";
 
-function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel }) {
+function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
   const [hotelName, setHotelName] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [isHotelFormOpen, setIsHotelFormOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editCity, setEditCity] = useState(stay.city);
 
   return (
     <div className="border rounded-lg p-4 shadow-lg bg-white mb-4">
-      <h3 className="text-lg font-bold">{stay.city}</h3>
+      <div className="flex justify-between items-start">
+        {isEditing ? (
+          <>
+            <input
+              value={editCity}
+              onChange={(e) => {
+                setEditCity(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  onUpdateStay(stay.id, { city: editCity });
+                  setIsEditing(false);
+                }
+                else if (e.key === 'Escape') {
+                  setEditCity(stay.city);
+                  setIsEditing(false);
+                }
+              }}
+              className="text-lg border-blue-400 bg-blue-50 rounded w-full mr-2 px-3 py-2"
+            />
+            <button
+              className="bg-green-500 text-white ml-2 px-3 py-2 rounded hover:bg-green-600 transition"
+              onClick={() => {
+                if (!editCity.trim()) {
+                  alert("City name cannot be empty.");
+                  return;
+                }
+                onUpdateStay(stay.id, { city: editCity });
+                setIsEditing(false);
+              }}
+            >
+              Save
+            </button>
+            <button
+              className="bg-gray-500 text-white ml-2 px-3 py-2 rounded hover:bg-gray-600 transition"
+              onClick={() => {
+                setEditCity(stay.city);
+                setIsEditing(false);
+              }}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <h3 className="text-lg p-2 font-bold w-full">{stay.city}</h3>
+            <button
+              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded hover:bg-blue-600 transition"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+          </>
+        )}
+      </div>
+
       <p className="text-sm text-gray-500 mt-1">
         {stay.startDate} → {stay.endDate}
       </p>
@@ -62,14 +119,14 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel }) {
             type="submit"
             className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
           >
-            Register
+            Save
           </button>
         </form>
       )}
 
       <button
         onClick={() => setIsHotelFormOpen(!isHotelFormOpen)}
-        className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition"
+        className="bg-green-500 text-white mr-2 px-3 py-2 rounded hover:bg-green-600 transition"
       >
         {isHotelFormOpen ? "Cancel" : "+ Add Hotel"}
       </button>
