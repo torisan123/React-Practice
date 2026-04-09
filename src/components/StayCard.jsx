@@ -11,6 +11,8 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
   const [editStartDate, setEditStartDate] = useState("");
   const [editEndDate, setEditEndDate] = useState("");
 
+  const buttonBase = "px-3 py-2 rounded-lg transition ml-2";
+
   const startEdit = () => {
     setEditCity(stay.city);
     setEditStartDate(stay.startDate);
@@ -69,17 +71,17 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
                     className="border border-gray-300 bg-gray-50 rounded px-3 py-2"
                   />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex justify-end gap-1 mt-2">
                   <button
-                    className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-                    onClick={() => {
+                      className={`${buttonBase} bg-blue-500 text-white hover:bg-blue-600`}ß
+                      onClick={() => {
                       handleSave();
                     }}
                   >
                     Save
                   </button>
                   <button
-                    className="bg-gray-100 text-gray-700 hover:bg-gray-200 ml-2 px-3 py-2 rounded-lg transition"
+                    className={`${buttonBase} bg-gray-100 text-gray-700 hover:bg-gray-200`}
                     onClick={() => {
                       // Revert changes
                       handleCancel();
@@ -97,12 +99,21 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
             <p className="text-sm text-gray-400 mt-1">
               {stay.startDate} - {stay.endDate}
             </p>
-            <button
-              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-              onClick={startEdit}
-            >
-              Edit
-            </button>
+
+            <div className="flex justify-end gap-1 mt-2">
+              <button
+                className={`${buttonBase} bg-blue-500 text-white hover:bg-blue-600`}
+                onClick={startEdit}
+              >
+                Edit
+              </button>
+              <button
+                className={`${buttonBase} bg-red-500 text-white hover:bg-red-600`}
+                onClick={onDelete}
+              >
+                Delete
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -161,16 +172,9 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
 
       <button
         onClick={() => setIsHotelFormOpen(!isHotelFormOpen)}
-        className="bg-blue-500 hover:bg-blue-600 text-white mr-2 px-3 py-2 rounded-lg transition"
+        className={`${buttonBase} bg-blue-500 hover:bg-blue-600 text-white mt-4 justify-self-end`}
       >
         {isHotelFormOpen ? "Cancel" : "+ Add Hotel"}
-      </button>
-
-      <button
-        onClick={onDelete}
-        className="text-red-500 hover:text-red-600 bg-transparent px-3 py-2 rounded transition mt-4"
-      >
-        Delete
       </button>
     </div>
   );
