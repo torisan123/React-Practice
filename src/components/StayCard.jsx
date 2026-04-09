@@ -7,69 +7,105 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
   const [checkOutDate, setCheckOutDate] = useState("");
   const [isHotelFormOpen, setIsHotelFormOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editCity, setEditCity] = useState(stay.city);
+  const [editCity, setEditCity] = useState("");
+  const [editStartDate, setEditStartDate] = useState("");
+  const [editEndDate, setEditEndDate] = useState("");
+
+  const startEdit = () => {
+    setEditCity(stay.city);
+    setEditStartDate(stay.startDate);
+    setEditEndDate(stay.endDate);
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    if (!editCity.trim()) return; // Prevent saving empty city
+
+    onUpdateStay(stay.id, {
+      city: editCity,
+      startDate: editStartDate,
+      endDate: editEndDate,
+    });
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditCity(stay.city);
+    setEditStartDate(stay.startDate);
+    setEditEndDate(stay.endDate);
+    setIsEditing(false);
+  };
 
   return (
     <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm border border-gray-100">
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col gap-4 w-full">
         {isEditing ? (
           <>
-            <input
-              value={editCity}
-              onChange={(e) => {
-                setEditCity(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onUpdateStay(stay.id, { city: editCity });
-                  setIsEditing(false);
-                }
-                else if (e.key === 'Escape') {
-                  setEditCity(stay.city);
-                  setIsEditing(false);
-                }
-              }}
-              className="text-lg border-blue-400 bg-blue-50 rounded w-full mr-2 px-3 py-2"
-            />
-            <button
-              className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-              onClick={() => {
-                if (!editCity.trim()) {
-                  alert("City name cannot be empty.");
-                  return;
-                }
-                onUpdateStay(stay.id, { city: editCity });
-                setIsEditing(false);
-              }}
-            >
-              Save
-            </button>
-            <button
-              className="bg-gray-100 text-gray-700 hover:bg-gray-200 text-white ml-2 px-3 py-2 rounded-lg transition"
-              onClick={() => {
-                setEditCity(stay.city);
-                setIsEditing(false);
-              }}
-            >
-              Cancel
-            </button>
+            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
+              <input
+                value={editCity}
+                onChange={(e) => setEditCity(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSave();
+                  } else if (e.key === "Escape") {
+                    handleCancel();
+                  }
+                }}
+                className="w-full text-lg border border-gray-300 bg-gray-50 rounded px-3 py-2"
+              />
+              <div className="flex justify-between items-center">
+                <div className="flex gap-2">
+                  <input
+                    value={editStartDate}
+                    type="date"
+                    onChange={(e) => setEditStartDate(e.target.value)}
+                    className="border border-gray-300 bg-gray-50 rounded px-3 py-2"
+                  />
+                  <input
+                    value={editEndDate}
+                    type="date"
+                    onChange={(e) => setEditEndDate(e.target.value)}
+                    className="border border-gray-300 bg-gray-50 rounded px-3 py-2"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
+                    onClick={() => {
+                      handleSave();
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="bg-gray-100 text-gray-700 hover:bg-gray-200 ml-2 px-3 py-2 rounded-lg transition"
+                    onClick={() => {
+                      // Revert changes
+                      handleCancel();
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           </>
         ) : (
           <>
             <h3 className="text-lg p-2 font-bold w-full">{stay.city}</h3>
+            <p className="text-sm text-gray-400 mt-1">
+              {stay.startDate} - {stay.endDate}
+            </p>
             <button
               className="bg-blue-500 text-white ml-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition"
-              onClick={() => setIsEditing(true)}
+              onClick={startEdit}
             >
               Edit
             </button>
           </>
         )}
       </div>
-
-      <p className="text-sm text-gray-400 mt-1">
-        {stay.startDate} - {stay.endDate}
-      </p>
 
       {stay.hotels.map((hotel) => (
         <HotelCard
@@ -89,7 +125,6 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
               checkIn: checkInDate,
               checkOut: checkOutDate,
             });
-
             setHotelName("");
             setCheckInDate("");
             setCheckOutDate("");
