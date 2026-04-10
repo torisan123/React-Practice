@@ -1,0 +1,1 @@
+export const buttonBase = "px-3 py-2 rounded-lg transition ml-2";

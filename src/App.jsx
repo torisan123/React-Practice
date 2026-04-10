@@ -1,5 +1,5 @@
-import "./App.css";
 import { useState, useEffect } from "react";
+import "./App.css";
 import StayCard from "./components/StayCard";
 
 const getInitialStays = () => {
@@ -53,11 +53,15 @@ function App() {
   }
 
   function onAddHotel(id, hotel) {
+    const newHotel = {
+      id: Date.now(),
+      ...hotel,
+    };
     const updated = stays.map((s) => {
       if (s.id === id) {
         return {
           ...s,
-          hotels: [...s.hotels, hotel],
+          hotels: [...s.hotels, newHotel],
         };
       }
       return s;
