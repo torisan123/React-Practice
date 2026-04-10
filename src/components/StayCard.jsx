@@ -1,40 +1,46 @@
 import { useState } from "react";
-import HotelCard from "./HotelCard";
+import StayHeader from "./StayHeader";
+import StayForm from "./StayForm";
+import HotelSection from "./HotelSection";
 
-function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
-  const [hotelName, setHotelName] = useState("");
-  const [checkInDate, setCheckInDate] = useState("");
-  const [checkOutDate, setCheckOutDate] = useState("");
-  const [isHotelFormOpen, setIsHotelFormOpen] = useState(false);
+export default function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
+  // State for editing stay details
   const [isEditing, setIsEditing] = useState(false);
-  const [editCity, setEditCity] = useState("");
-  const [editStartDate, setEditStartDate] = useState("");
-  const [editEndDate, setEditEndDate] = useState("");
-
-  const buttonBase = "px-3 py-2 rounded-lg transition ml-2";
+  const [stayDraft, setStayDraft] = useState({
+    city: "",
+    startDate: "",
+    endDate: "",
+  });
 
   const startEdit = () => {
-    setEditCity(stay.city);
-    setEditStartDate(stay.startDate);
-    setEditEndDate(stay.endDate);
+    setStayDraft({
+      city: stay.city,
+      startDate: stay.startDate,
+      endDate: stay.endDate,
+    });
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    if (!editCity.trim()) return; // Prevent saving empty city
+  const handleChange = (field, value) => {
+    setStayDraft((prev) => ({ ...prev, [field]: value }));
+  };
 
+  const handleSave = () => {
+    if (!stayDraft.city.trim()) return;
     onUpdateStay(stay.id, {
-      city: editCity,
-      startDate: editStartDate,
-      endDate: editEndDate,
+      city: stayDraft.city,
+      startDate: stayDraft.startDate,
+      endDate: stayDraft.endDate,
     });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditCity(stay.city);
-    setEditStartDate(stay.startDate);
-    setEditEndDate(stay.endDate);
+    setStayDraft({
+      city: stay.city,
+      startDate: stay.startDate,
+      endDate: stay.endDate,
+    });
     setIsEditing(false);
   };
 
@@ -42,142 +48,18 @@ function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
     <div className="bg-white/80 backdrop-blur rounded-2xl p-5 shadow-sm border border-gray-100">
       <div className="flex flex-col gap-4 w-full">
         {isEditing ? (
-          <>
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3">
-              <input
-                value={editCity}
-                onChange={(e) => setEditCity(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleSave();
-                  } else if (e.key === "Escape") {
-                    handleCancel();
-                  }
-                }}
-                className="w-full text-lg border border-gray-300 bg-gray-50 rounded px-3 py-2"
-              />
-              <div className="flex justify-between items-center">
-                <div className="flex gap-2">
-                  <input
-                    value={editStartDate}
-                    type="date"
-                    onChange={(e) => setEditStartDate(e.target.value)}
-                    className="border border-gray-300 bg-gray-50 rounded px-3 py-2"
-                  />
-                  <input
-                    value={editEndDate}
-                    type="date"
-                    onChange={(e) => setEditEndDate(e.target.value)}
-                    className="border border-gray-300 bg-gray-50 rounded px-3 py-2"
-                  />
-                </div>
-                <div className="flex justify-end gap-1 mt-2">
-                  <button
-                      className={`${buttonBase} bg-blue-500 text-white hover:bg-blue-600`}ß
-                      onClick={() => {
-                      handleSave();
-                    }}
-                  >
-                    Save
-                  </button>
-                  <button
-                    className={`${buttonBase} bg-gray-100 text-gray-700 hover:bg-gray-200`}
-                    onClick={() => {
-                      // Revert changes
-                      handleCancel();
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>
+          <StayForm
+            editState={stayDraft}
+            handleChange={handleChange}
+            handleSave={handleSave}
+            handleCancel={handleCancel}
+          />
         ) : (
-          <>
-            <h3 className="text-lg p-2 font-bold w-full">{stay.city}</h3>
-            <p className="text-sm text-gray-400 mt-1">
-              {stay.startDate} - {stay.endDate}
-            </p>
-
-            <div className="flex justify-end gap-1 mt-2">
-              <button
-                className={`${buttonBase} bg-blue-500 text-white hover:bg-blue-600`}
-                onClick={startEdit}
-              >
-                Edit
-              </button>
-              <button
-                className={`${buttonBase} bg-red-500 text-white hover:bg-red-600`}
-                onClick={onDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </>
+          <StayHeader stay={stay} onDelete={onDelete} startEdit={startEdit} />
         )}
       </div>
 
-      {stay.hotels.map((hotel) => (
-        <HotelCard
-          key={hotel.id}
-          hotel={hotel}
-          onDelete={() => onDeleteHotel(stay.id, hotel.id)}
-        />
-      ))}
-
-      {isHotelFormOpen && (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onAddHotel(stay.id, {
-              id: Date.now(),
-              name: hotelName,
-              checkIn: checkInDate,
-              checkOut: checkOutDate,
-            });
-            setHotelName("");
-            setCheckInDate("");
-            setCheckOutDate("");
-            setIsHotelFormOpen(false);
-          }}
-          className="flex flex-col gap-2 mt-3"
-        >
-          <input
-            value={hotelName}
-            onChange={(e) => setHotelName(e.target.value)}
-            placeholder="Hotel Name"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <input
-            value={checkInDate}
-            onChange={(e) => setCheckInDate(e.target.value)}
-            type="date"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <input
-            value={checkOutDate}
-            onChange={(e) => setCheckOutDate(e.target.value)}
-            type="date"
-            className="border p-2 rounded w-full mt-2"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition"
-          >
-            Save
-          </button>
-        </form>
-      )}
-
-      <button
-        onClick={() => setIsHotelFormOpen(!isHotelFormOpen)}
-        className={`${buttonBase} bg-blue-500 hover:bg-blue-600 text-white mt-4 justify-self-end`}
-      >
-        {isHotelFormOpen ? "Cancel" : "+ Add Hotel"}
-      </button>
+      <HotelSection stayId={stay.id} hotels={stay.hotels} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />
     </div>
   );
 }
-
-export default StayCard;
