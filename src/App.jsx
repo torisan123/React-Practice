@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import StayCard from "./components/StayCard";
+import StaySection from "./components/Stay/StaySection.jsx";
 
 const getInitialStays = () => {
   try {
@@ -138,12 +138,12 @@ function App() {
           )}
           {stays.map((stay) => (
             <li className="mb-4" key={stay.id}>
-              <StayCard
+              <StaySection
                 stay={stay}
                 onDelete={() => onDeleteStay(stay.id)}
+                onUpdateStay={onUpdateStay}
                 onAddHotel={onAddHotel}
                 onDeleteHotel={onDeleteHotel}
-                onUpdateStay={onUpdateStay}
               />
             </li>
           ))}

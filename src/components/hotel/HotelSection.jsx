@@ -1,4 +1,4 @@
-import { buttonBase } from "../styles/buttonStyles";
+import { buttonBase } from "../../styles/buttonStyles";
 import { useState } from "react";
 import HotelList from "./HotelList";
 import HotelForm from "./HotelForm";
