@@ -8,6 +8,7 @@ export default function StaySection({
   onUpdateStay,
   onDelete,
   onAddHotel,
+  onUpdateHotel,
   onDeleteHotel,
 }) {
   // State for editing stay details
@@ -68,6 +69,7 @@ export default function StaySection({
         stayId={stay.id}
         hotels={stay.hotels}
         onAddHotel={onAddHotel}
+        onUpdateHotel={onUpdateHotel}
         onDeleteHotel={onDeleteHotel}
       />
     </div>

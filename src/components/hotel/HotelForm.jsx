@@ -1,27 +1,33 @@
-export default function HotelForm({ hotel, onChange, onSubmit }) {
+import { useState } from "react";
+
+export default function HotelForm({ hotel, onSubmit }) {
+  const [name, setName] = useState(hotel.name || "");
+  const [checkIn, setCheckIn] = useState(hotel.checkIn || "");
+  const [checkOut, setCheckOut] = useState(hotel.checkOut || "");
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSubmit();
+        onSubmit({ name, checkIn, checkOut });
       }}
       className="bg-blue-50 border border-blue-100 rounded-xl p-4 space-y-3 mt-3"
     >
       <input
-        value={hotel.name}
-        onChange={(e) => onChange("name", e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         placeholder="Hotel Name"
         className="border p-2 rounded w-full mt-2"
       />
       <input
-        value={hotel.checkIn}
-        onChange={(e) => onChange("checkIn", e.target.value)}
+        value={checkIn}
+        onChange={(e) => setCheckIn(e.target.value)}
         type="date"
         className="border p-2 rounded w-full mt-2"
       />
       <input
-        value={hotel.checkOut}
-        onChange={(e) => onChange("checkOut", e.target.value)}
+        value={checkOut}
+        onChange={(e) => setCheckOut(e.target.value)}
         type="date"
         className="border p-2 rounded w-full mt-2"
       />
