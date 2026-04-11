@@ -1,4 +1,4 @@
-import { buttonBase } from "../styles/buttonStyles";
+import { buttonBase } from "../../styles/buttonStyles";
 
 export default function StayHeader({stay,onDelete,startEdit}) {
   return (

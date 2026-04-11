@@ -1,4 +1,4 @@
-import { buttonBase } from "../styles/buttonStyles";
+import { buttonBase } from "../../styles/buttonStyles";
 import { useState } from "react";
 import HotelList from "./HotelList";
 import HotelForm from "./HotelForm";
@@ -7,6 +7,7 @@ export default function HotelSection({
   stayId,
   hotels,
   onAddHotel,
+  onUpdateHotel,
   onDeleteHotel,
 }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -16,14 +17,10 @@ export default function HotelSection({
     checkOut: "",
   });
 
-  const handleHotelChange = (field, value) => {
-    setHotelDraft((prev) => ({ ...prev, [field]: value }));
-  };
+  const handleHotelSubmit = (data) => {
+    if (!data.name.trim()) return;
 
-  const handleHotelSubmit = () => {
-    if (!hotelDraft.name.trim()) return;
-
-    onAddHotel(stayId, hotelDraft);
+    onAddHotel(stayId, data);
     setHotelDraft({
       name: "",
       checkIn: "",
@@ -34,14 +31,15 @@ export default function HotelSection({
 
   return (
     <div>
-      <HotelList hotels={hotels} onDelete={(hotelId) => onDeleteHotel(stayId, hotelId)} />
+      <HotelList
+        stayId={stayId}
+        hotels={hotels}
+        onUpdate={onUpdateHotel}
+        onDelete={(hotelId) => onDeleteHotel(stayId, hotelId)}
+      />
 
       {isFormOpen && (
-        <HotelForm
-          hotel={hotelDraft}
-          onChange={handleHotelChange}
-          onSubmit={handleHotelSubmit}
-        />
+        <HotelForm hotel={hotelDraft} onSubmit={handleHotelSubmit} />
       )}
       <button
         onClick={() => setIsFormOpen(!isFormOpen)}

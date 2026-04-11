@@ -1,15 +1,22 @@
 import { useState } from "react";
 import StayHeader from "./StayHeader";
 import StayForm from "./StayForm";
-import HotelSection from "./HotelSection";
+import HotelSection from "../hotel/HotelSection";
 
-export default function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, onUpdateStay }) {
+export default function StaySection({
+  stay,
+  onUpdateStay,
+  onDelete,
+  onAddHotel,
+  onUpdateHotel,
+  onDeleteHotel,
+}) {
   // State for editing stay details
   const [isEditing, setIsEditing] = useState(false);
   const [stayDraft, setStayDraft] = useState({
     city: "",
     startDate: "",
-    endDate: "",
+    endDate: ""
   });
 
   const startEdit = () => {
@@ -58,8 +65,13 @@ export default function StayCard({ stay, onDelete, onAddHotel, onDeleteHotel, on
           <StayHeader stay={stay} onDelete={onDelete} startEdit={startEdit} />
         )}
       </div>
-
-      <HotelSection stayId={stay.id} hotels={stay.hotels} onAddHotel={onAddHotel} onDeleteHotel={onDeleteHotel} />
+      <HotelSection
+        stayId={stay.id}
+        hotels={stay.hotels}
+        onAddHotel={onAddHotel}
+        onUpdateHotel={onUpdateHotel}
+        onDeleteHotel={onDeleteHotel}
+      />
     </div>
   );
 }

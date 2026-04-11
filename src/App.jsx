@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import StayCard from "./components/StayCard";
+import StaySection from "./components/Stay/StaySection";
 
 const getInitialStays = () => {
   try {
@@ -47,6 +47,17 @@ function App() {
     setStartDate("");
   }
 
+    function onUpdateStay(id, updateStay) {
+    setStays(prev => {
+      return prev.map((s) => {
+        if (s.id === id) {
+          return { ...s, ...updateStay };
+        }
+        return s;
+      });
+    });
+  }
+
   function onDeleteStay(id) {
     // Remove the specified plan from the list
     setStays(stays.filter((s) => s.id !== id));
@@ -69,6 +80,25 @@ function App() {
     setStays(updated);
   }
 
+  function onUpdateHotel(stayId, hotelId, updateHotel) {
+    setStays(prev => {
+      return prev.map((s) => {
+        if (s.id === stayId) {
+          return {
+            ...s,
+            hotels: s.hotels.map((h) => {
+              if (h.id === hotelId) {
+                return { ...h, ...updateHotel };
+              }
+              return h;
+            }),
+          };
+        }
+        return s;
+      });
+    });
+  }
+
   function onDeleteHotel(stayId, hotelId) {
     const updated = stays.map((s) => {
       if (s.id === stayId) {
@@ -80,17 +110,6 @@ function App() {
       return s;
     });
     setStays(updated);
-  }
-
-  function onUpdateStay(id, updateStay) {
-    setStays((prev) => {
-      return prev.map((s) => {
-        if (s.id === id) {
-          return { ...s, ...updateStay };
-        }
-        return s;
-      });
-    });
   }
 
   return (
@@ -138,12 +157,13 @@ function App() {
           )}
           {stays.map((stay) => (
             <li className="mb-4" key={stay.id}>
-              <StayCard
+              <StaySection
                 stay={stay}
                 onDelete={() => onDeleteStay(stay.id)}
-                onAddHotel={onAddHotel}
-                onDeleteHotel={onDeleteHotel}
                 onUpdateStay={onUpdateStay}
+                onAddHotel={onAddHotel}
+                onUpdateHotel={onUpdateHotel}
+                onDeleteHotel={onDeleteHotel}
               />
             </li>
           ))}
