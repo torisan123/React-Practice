@@ -1,7 +1,7 @@
 import { useState } from "react";
-import StayHeader from "./StayHeader.jsx";
-import StayForm from "./StayForm.jsx";
-import HotelSection from "../hotel/HotelSection.jsx";
+import StayHeader from "./StayHeader";
+import StayForm from "./StayForm";
+import HotelSection from "../hotel/HotelSection";
 
 export default function StaySection({
   stay,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import StaySection from "./components/Stay/StaySection.jsx";
+import StaySection from "./components/Stay/StaySection";
 
 const getInitialStays = () => {
   try {
